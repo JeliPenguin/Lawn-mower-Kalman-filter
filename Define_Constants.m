@@ -14,9 +14,16 @@ Omega_ie = Skew_symmetric([0,0,omega_ie]);
 R_0 = 6378137; %WGS84 Equatorial radius in meters
 e = 0.0818191908425; %WGS84 eccentricity
 
-S_c_phi = 0.01; % clock phase PSD
-S_cf = 0.04; % clock frequency PSD
-sigma_p = 5;
+sigma_r = [10;10;10]; % Initial position standard deviation
+sigma_v = [0.1;0.1;0.1]; % Initial velocity standard deviation
+sigma_co = 10; % Initial clock offset standard deviation
+sigma_cd = 0.1; % Initial clock drift standard deviation
+sigma_rho = 10; % Psuedo-range measurement error std
+sigma_rho_dot = 0.05; % Pseudo-range rate measurement error std
+S_c_phi = 0.01; % Clock phase PSD
+S_cf = 0.04; % Clock frequency PSD
 T = 6; % Outlier detection threshold
+tau = 1; % Propagation interval
+S_a = 5; % acceleration power spectral density
 
 % Ends
