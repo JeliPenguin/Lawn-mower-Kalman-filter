@@ -1,8 +1,12 @@
 % Load in data
-pseudoRangeFile = readtable("Pseudo_ranges.csv");
-pseudoRangeRateFile = readtable("Pseudo_range_rates.csv");
+% pseudoRangeFile = readtable("Pseudo_ranges.csv");
+% pseudoRangeRateFile = readtable("Pseudo_range_rates.csv");
+
 % pseudoRangeFile = readtable("Workshop1_Pseudo_ranges.csv");
 % pseudoRangeRateFile = readtable("Workshop1_Pseudo_range_rates.csv");
+
+pseudoRangeFile = readtable("Workshop2_Pseudo_ranges.csv");
+pseudoRangeRateFile = readtable("Workshop2_Pseudo_range_rates.csv");
 
 satelliteNumRow = table2array(pseudoRangeFile(1,:));
 satelliteNumbers = satelliteNumRow(2:end);

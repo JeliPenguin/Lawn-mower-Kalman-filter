@@ -14,4 +14,9 @@ Omega_ie = Skew_symmetric([0,0,omega_ie]);
 R_0 = 6378137; %WGS84 Equatorial radius in meters
 e = 0.0818191908425; %WGS84 eccentricity
 
+S_c_phi = 0.01; % clock phase PSD
+S_cf = 0.04; % clock frequency PSD
+sigma_p = 5;
+T = 6; % Outlier detection threshold
+
 % Ends

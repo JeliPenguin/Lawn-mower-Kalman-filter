@@ -11,12 +11,6 @@ outputFile = "Output_Profile";
 % 6: Heading in degrees.
 outputs = zeros(epochNum,6);
 
-% Define additional constants
-S_c_phi = 0.01; % clock phase PSD
-S_cf = 0.04; % clock frequency PSD
-sigma_p = 5;
-T = 6; % Outlier detection threshold
-
 % Define variables
 r_caret_as_minus = zeros(1,numberOfSatellites);
 r_caret_dot_as_minus = zeros(1,numberOfSatellites);
@@ -32,8 +26,8 @@ v_caret_ea_e_minus = [0;0;0]; % Initial user velocity prediction
 delta_rho_caret_c_a_minus = 0; % Predicted receiver clock offset
 delta_rho_caret_dot_c_a_minus = 0; %Predicted receiver clock drift
 
-for i=1:epochNum
-% for i=1:5
+% for i=1:epochNum
+for i=1:1
     % Load data for current epoch
     time = times(i);
     pseudoRangeMeasurements = pseudoRanges(i,:);
@@ -80,10 +74,8 @@ for i=1:epochNum
         x_caret_min = [v_caret_ea_e_minus;delta_rho_caret_dot_c_a_minus];
         x_caret_plus = x_caret_min + inv(H_G_e.'*H_G_e)*H_G_e.'*delta_z_dot_min;
         v_caret_ea_e_plus = x_caret_plus(1:3);
+        delta_rho_caret_dot_c_a_plus = x_caret_plus(end);
         
-        [L_b,lambda_b,h_b,v_eb_n] = pv_ECEF_to_NED(r_caret_ea_e_plus,v_caret_ea_e_plus);
-        lat = L_b * rad_to_deg;
-        long = lambda_b * rad_to_deg;
         diff = norm(r_caret_ea_e_plus-r_caret_ea_e_minus) + norm(v_caret_ea_e_plus-v_caret_ea_e_minus);
 
         % For next iteration
@@ -91,6 +83,10 @@ for i=1:epochNum
         v_caret_ea_e_minus = v_caret_ea_e_plus;
     end
     % disp([time,lat,long,h_b])
+    disp([r_caret_ea_e_plus',v_caret_ea_e_plus',delta_rho_caret_c_a_plus,delta_rho_caret_dot_c_a_plus])
+    [L_b,lambda_b,h_b,v_eb_n] = pv_ECEF_to_NED(r_caret_ea_e_plus,v_caret_ea_e_plus);
+    lat = L_b * rad_to_deg;
+    long = lambda_b * rad_to_deg;
 
     heading = 0; % in radians
     outputs(i,:) = [time,lat,long,v_eb_n(1),v_eb_n(2),heading];
