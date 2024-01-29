@@ -50,7 +50,7 @@ Q_k_m_1 = [S_a*tau^3*eye(3)/3,S_a*tau^2*eye(3)/2,zeros(3,1),zeros(3,1)
            zeros(1,3),zeros(1,3),S_c_phi*tau+S_cf*tau^3/3,S_cf*tau^2/2
            zeros(1,3),zeros(1,3),S_cf*tau^2/2,S_cf*tau
            ];
-
+solution = [];
 % disp(Q_k_m_1)
 for epoch = 1:epochNum
 % for epoch =1:1
@@ -103,6 +103,9 @@ for epoch = 1:epochNum
     [L_b,lambda_b,h_b,v_eb_n] = pv_ECEF_to_NED(r_eb_e,v_eb_e);
     L_b = L_b * rad_to_deg;
     lambda_b = lambda_b * rad_to_deg;
-    disp([epoch-1,L_b,lambda_b,h_b,v_eb_n.'])
+    solution = [solution;[epoch-1,L_b,lambda_b,h_b,v_eb_n.']];
     % disp(epoch)
 end
+
+solutionTable = array2table(solution);
+writetable(solutionTable,"WS2_Task2Solution.csv","WriteVariableNames",false)

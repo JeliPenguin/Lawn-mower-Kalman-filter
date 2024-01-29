@@ -35,7 +35,7 @@ Q_k_m_1 = [S_DR*tau_s,0,0.5*S_DR*tau_s^2/(R_N+h),0
            0.5*S_DR*tau_s^2/(R_N+h),0,S_DR*tau_s^3/(3*(R_N+h)^2),0
            0,0.5*S_DR*tau_s^2/((R_E+h)*cos(lat)),0,S_DR*tau_s^3/(3*(R_E+h)^2*(cos(lat)^2))];
 
-solutionTable = [gnssPosVel(1,1),gnssPosVel(1,2)*deg_to_rad,gnssPosVel(1,3)*deg_to_rad,gnssPosVel(1,4),gnssPosVel(1,5),gnssPosVel(1,6),gnssPosVel(1,7)];
+solutionTable = [gnssPosVel(1,1),gnssPosVel(1,2),gnssPosVel(1,3),gnssPosVel(1,5),gnssPosVel(1,6)];
 
 for i = 2:epochNum
 
@@ -77,7 +77,7 @@ for i = 2:epochNum
     P_plus_k_m_1 = (eye(4) - K_k*H_k)*P_minus_k;
 
     solution = [v_N_DR;v_E_DR;latDR;longDR]-x_caret_plus_k_m_1;
-    solution = [time,solution(3:4)',gnssPosVel(1,4),solution(1:2)',gnssPosVel(1,7)];
+    solution = [time,solution(3:4)'*rad_to_deg,solution(1:2)'];
     solutionTable = [solutionTable;solution];
 
     Phi_k_m_1 = [1,0,0,0
