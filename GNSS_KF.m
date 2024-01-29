@@ -5,10 +5,7 @@ GNSS_Solution = [];
 
 % Initialize initial state for Kalman Filter, giving initial x_est and
 % P_matrix
-Initialise_GNSS_KF;
-
-x_caret_plus_k_m_1 = x_est;
-P_plus_k_m_1 = P_matrix;
+[x_caret_plus_k_m_1,P_plus_k_m_1] = Initialise_GNSS_KF(times,pseudoRanges,pseudoRangeRates,satelliteNumbers,numberOfSatellites,Omega_ie,sigma_p,T,sigma_r,sigma_v,sigma_co,sigma_cd);
 
 % Compute transition matrix
 phi_k_m_1 = [eye(3),eye(3)*tau,zeros(3,1),zeros(3,1)

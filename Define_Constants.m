@@ -20,10 +20,11 @@ sigma_co = 10; % Initial clock offset standard deviation
 sigma_cd = 0.1; % Initial clock drift standard deviation
 sigma_rho = 10; % Psuedo-range measurement error std
 sigma_rho_dot = 0.05; % Pseudo-range rate measurement error std
+sigma_p = 5; % Measurement error standard deviation (m)
 S_c_phi = 0.01; % Clock phase PSD
 S_cf = 0.04; % Clock frequency PSD
 T = 6; % Outlier detection threshold
 tau = 1; % Propagation interval
-S_a = 5; % acceleration power spectral density
+S_a = 5; % Acceleration power spectral density
 
 % Ends
