@@ -21,19 +21,16 @@ dr_velocity_e = dr_solution(:,5);
 
 Plot_Graph(dr_longitude,dr_latitude,dr_velocity_n,dr_velocity_e,times,"DR",false)
 
+%% DR/GNSS Solution
+dr_gnss_solution = DR_GNSS(gnss_solution,dr_solution,times);
+dr_gnss_latitude = dr_gnss_solution(:,2);
+dr_gnss_longitude = dr_gnss_solution(:,3);
+dr_gnss_velocity_n = dr_gnss_solution(:,4);
+dr_gnss_velocity_e = dr_gnss_solution(:,5);
+
+Plot_Graph(dr_gnss_longitude,dr_gnss_latitude,dr_gnss_velocity_n,dr_gnss_velocity_e,times,"DR-GNSS",false)
 
 %% INS/GNSS Solution
+% ins_gnss_solution = INS_GNSS();
 
-% Configure final outputs
-% outputFile = "Output_Profile";
-% % 1: Time
-% % 2: Geodetic latitude in degrees
-% % 3: Geodetic longitude in degrees 
-% % 4: North velocity in m/s
-% % 5: East velocity in m/s
-% % 6: Heading in degrees.
-% outputs = zeros(epochNum,6);
-
-% Write to table and export
-% outputTable = table(outputs);
-% writetable(outputTable,"Solutions/"+outputFile+".csv",'WriteVariableNames',0)
+% Plot_Graph(dr_longitude,dr_latitude,dr_velocity_n,dr_velocity_e,times,"DR",false)

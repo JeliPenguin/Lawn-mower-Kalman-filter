@@ -31,7 +31,7 @@ pseudo_range_rates = pseudo_range_rate_data(2:end,2:end);
 gnss_solution = [];
 
 % Initialize initial state for Kalman Filter, giving initial x_est and P_matrix
-[x_caret_plus_k_m_1,P_plus_k_m_1] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers,satellite_count,Omega_ie,sigma_p,T,sigma_r,sigma_v,sigma_co,sigma_cd);
+[x_caret_plus_k_m_1,P_plus_k_m_1] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers,satellite_count,Omega_ie,sigma_p,T,sigma_co,sigma_cd,sigma_r,sigma_v);
 
 % Compute transition matrix
 phi_k_m_1 = CalcPhi(tau);
@@ -39,7 +39,9 @@ phi_k_m_1 = CalcPhi(tau);
 % Compute system noise covariance matrix
 Q_k_m_1 = CalcQ(tau,S_a,S_cf,S_c_phi);
 
-r_caret_as_minus = zeros(satellite_count,1); % Predicted psuedo ranges
+% Predicted psuedo ranges
+r_caret_as_minus = zeros(satellite_count,1); 
+
 for j = 1:satellite_count
     [sat_r_es_e,sat_v_es_e]= Satellite_position_and_velocity(times(1),satellite_numbers(j));
     diff = sat_r_es_e.'-x_caret_plus_k_m_1(1:3);

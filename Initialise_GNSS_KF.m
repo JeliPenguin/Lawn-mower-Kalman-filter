@@ -1,4 +1,4 @@
-function [x_est,P_matrix] = Initialise_GNSS_KF(times,pseudoRanges,pseudoRangeRates,satelliteNumbers,numberOfSatellites,Omega_ie,sigma_p,T,sigma_r,sigma_v,sigma_co,sigma_cd)
+function [x_est,P_matrix] = Initialise_GNSS_KF(times,pseudoRanges,pseudoRangeRates,satelliteNumbers,numberOfSatellites,Omega_ie,sigma_p,T,sigma_co,sigma_cd,sigma_r,sigma_v)
     %Initialise_GNSS_KF - Initializes the GNSS EKF state estimates and error
     %covariance matrix using one epoch least squares
 
@@ -75,7 +75,7 @@ function [x_est,P_matrix] = Initialise_GNSS_KF(times,pseudoRanges,pseudoRangeRat
         v_caret_ea_e_plus = x_caret_plus(1:3);
         delta_rho_caret_dot_c_a_plus = x_caret_plus(end);
         
-        diff = norm(r_caret_ea_e_plus-r_caret_ea_e_minus) + norm(v_caret_ea_e_plus-v_caret_ea_e_minus);
+        diff = norm([r_caret_ea_e_plus,v_caret_ea_e_plus]-[r_caret_ea_e_minus,v_caret_ea_e_minus]);
     
         % For next iteration
         r_caret_ea_e_minus = r_caret_ea_e_plus;
@@ -96,12 +96,12 @@ function [x_est,P_matrix] = Initialise_GNSS_KF(times,pseudoRanges,pseudoRangeRat
     
     % Initialise error covariance matrix
     P_matrix =  zeros(8);
-    P_matrix(1,1) = sigma_co^2;
-    P_matrix(2,2) = sigma_co^2;
-    P_matrix(3,3) = sigma_co^2;
-    P_matrix(4,4) = sigma_cd^2;
-    P_matrix(5,5) = sigma_cd^2;
-    P_matrix(6,6) = sigma_cd^2;
+    P_matrix(1,1) = sigma_r^2;
+    P_matrix(2,2) = sigma_r^2;
+    P_matrix(3,3) = sigma_r^2;
+    P_matrix(4,4) = sigma_v^2;
+    P_matrix(5,5) = sigma_v^2;
+    P_matrix(6,6) = sigma_v^2;
     P_matrix(7,7) = sigma_co^2;
     P_matrix(8,8) = sigma_cd^2;
     

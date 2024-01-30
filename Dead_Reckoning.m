@@ -6,15 +6,18 @@ function dr_solution = Dead_Reckoning(dr_measurement_data,gnss_solution,times)
 %
 % Outputs:
 %   dr_solution                         Calculated DR solution, for each row
-%                                           Col 1: Latitude
-%                                           Col 2: Longitude
-%                                           Col 3: Damped North Velocity (m/s)
-%                                           Col 4: Damped East Velocity (m/s)
+%                                           Col 1: Time (s)
+%                                           Col 2: Latitude (deg)
+%                                           Col 3: Longitude (deg)
+%                                           Col 4: Damped North Velocity (m/s)
+%                                           Col 5: Damped East Velocity (m/s)
 
 Define_Constants;
 
 dr_measurement = dr_measurement_data(:,2:end);
-epoch_num = height(times); % Total count of epochs
+
+% Total count of epochs
+epoch_num = height(times); 
 
 lat = gnss_solution(1,2) * deg_to_rad;
 long = gnss_solution(1,3)*deg_to_rad;
