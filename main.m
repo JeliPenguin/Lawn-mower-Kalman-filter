@@ -1,4 +1,7 @@
 clear;
+
+Load_Data;
+
 % Configure outputs
 outputFile = "Output_Profile";
 % 1: Time
@@ -9,17 +12,16 @@ outputFile = "Output_Profile";
 % 6: Heading in degrees.
 % outputs = zeros(epochNum,6);
 
-% GNSS Kalman Filter estimation, saving solutions in GNSS_Solution.csv
-% For each row
-% Col 1: Latitude (deg)
-% Col 2: Longitude (deg)
-% Col 3: Height (m)
-% Col 4: North Velocity (m/s)
-% Col 5: East Velocity (m/s)
-% Col 6: Down Velocity (m/s)
-GNSS_KF;
 
+gnss_solution = GNSS_KF(pseudo_ranges,pseudo_range_rates,satellite_numbers,satellite_count,times,epoch_num);
+gnss_latitude = gnss_solution(:,2);
+gnss_longitude = gnss_solution(:,3);
+gnss_velocity_n = gnss_solution(:,5);
+gnss_velocity_e = gnss_solution(:,6);
 
+Plot_Graph(gnss_longitude,gnss_latitude,"GNSS Position","Longitude","Latitude")
+Plot_Graph(times,gnss_velocity_n,"GNSS North Velocity","Time","Velocity")
+Plot_Graph(times,gnss_velocity_e,"GNSS East Velocity","Time","Velocity")
 
 % Write to table and export
 % outputTable = table(outputs);

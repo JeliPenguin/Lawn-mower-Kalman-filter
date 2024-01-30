@@ -96,12 +96,12 @@ function [x_est,P_matrix] = Initialise_GNSS_KF(times,pseudoRanges,pseudoRangeRat
     
     % Initialise error covariance matrix
     P_matrix =  zeros(8);
-    P_matrix(1,1) = sigma_r(1)^2;
-    P_matrix(2,2) = sigma_r(2)^2;
-    P_matrix(3,3) = sigma_r(3)^2;
-    P_matrix(4,4) = sigma_v(1)^2;
-    P_matrix(5,5) = sigma_v(2)^2;
-    P_matrix(6,6) = sigma_v(3)^2;
+    P_matrix(1,1) = sigma_co^2;
+    P_matrix(2,2) = sigma_co^2;
+    P_matrix(3,3) = sigma_co^2;
+    P_matrix(4,4) = sigma_cd^2;
+    P_matrix(5,5) = sigma_cd^2;
+    P_matrix(6,6) = sigma_cd^2;
     P_matrix(7,7) = sigma_co^2;
     P_matrix(8,8) = sigma_cd^2;
     
