@@ -14,6 +14,8 @@ Omega_ie = Skew_symmetric([0,0,omega_ie]);
 R_0 = 6378137; %WGS84 Equatorial radius in meters
 e = 0.0818191908425; %WGS84 eccentricity
 
+sigma_r = [10;10;10]; % Initial position standard deviation
+sigma_v = [0.1;0.1;0.1]; % Initial velocity standard deviation
 sigma_co = 100000; % Initial clock offset standard deviation
 sigma_cd = 200; % Reciever clock drift standard deviation
 
