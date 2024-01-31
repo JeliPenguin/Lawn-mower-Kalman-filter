@@ -2,7 +2,7 @@ function dr_gnss_solution = DR_GNSS(gnss_solution,dr_solution,times)
 % Calculates the GNSS corrected Dead Reckoning solution
 % Inputs:
 %   gnss_solution                       
-%   times                               Array of time value for each epoch
+%   times                                    Array of time value for each epoch
 %
 % Outputs:
 %   dr_gnss_solution                         Calculated DR/GNSS solution
@@ -68,8 +68,8 @@ for i = 2:epoch_num
 
     K_k = P_k_minus*H_k'*inv(H_k*P_k_minus*H_k'+R_k);
     
-    dr_lat = dr_solution(i,2);
-    dr_long = dr_solution(i,3);
+    dr_lat = dr_solution(i,2)*deg_to_rad;
+    dr_long = dr_solution(i,3)*deg_to_rad;
     dr_v_N = dr_solution(i,4);
     dr_v_E = dr_solution(i,5);
     delta_z_m_k = [gnss_lat-dr_lat;

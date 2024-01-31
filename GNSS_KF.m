@@ -48,7 +48,8 @@ for j = 1:satellite_count
     r_caret_as_minus(j) = sqrt(diff.'*diff);
 end % Predicted range initialization
 
-u_e_a = zeros(3,satellite_count); % Line of sight
+% Line of sight and measurement matrix initialization
+u_e_a = zeros(3,satellite_count); 
 H_k = zeros(satellite_count*2,8);
 H_k(1:satellite_count,7) = 1;
 H_k(satellite_count+1:end,8) = 1;
