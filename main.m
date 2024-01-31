@@ -30,7 +30,10 @@ dr_gnss_velocity_e = dr_gnss_solution(:,5);
 
 Plot_Graph(dr_gnss_longitude,dr_gnss_latitude,dr_gnss_velocity_n,dr_gnss_velocity_e,times,"DR-GNSS",false)
 
-%% INS/GNSS Solution
-% ins_gnss_solution = INS_GNSS();
+%% Gyro-smoothed Magnetic Heading solution
+% gyro_mag_heading_solution = Gyro_Magnetic_Heading(dr_measurement_data,times);
+
+% %% INS/GNSS Solution
+% ins_gnss_solution = INS_GNSS(gnss_solution,dr_gnss_solution,dr_measurement_data,times);
 
 % Plot_Graph(dr_longitude,dr_latitude,dr_velocity_n,dr_velocity_e,times,"DR",false)

@@ -22,31 +22,42 @@ Define_Constants;
 satellite_numbers = pseudo_range_data(1,2:end); % Array of satellite numbers
 satellite_count = length(satellite_numbers); % Total count of satellites
 
-epoch_num = height(times); % Total count of epochs
+% Total count of epochs
+epoch_num = height(times); 
 
+% Extracting psuedo-range and pseudo-range rate only data
 pseudo_ranges = pseudo_range_data(2:end,2:end);
 pseudo_range_rates = pseudo_range_rate_data(2:end,2:end);
 
 % Array for saving results
-gnss_solution = [];
+gnss_solution = zeros(epoch_num,7);
 
 % Initialize initial state for Kalman Filter, giving initial x_est and P_matrix
-[x_caret_plus_k_m_1,P_plus_k_m_1] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers,satellite_count,Omega_ie,sigma_p,T,sigma_co,sigma_cd,sigma_r,sigma_v);
+[x_caret_plus_k_m_1,P_plus_k_m_1] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers,satellite_count);
 
 % Compute transition matrix
-phi_k_m_1 = CalcPhi(tau);
+phi_k_m_1 = [eye(3),eye(3)*tau,zeros(3,1),zeros(3,1)
+             zeros(3),eye(3),zeros(3,1),zeros(3,1)
+             zeros(1,3),zeros(1,3),1,tau
+             zeros(1,3),zeros(1,3),0,1];
 
 % Compute system noise covariance matrix
-Q_k_m_1 = CalcQ(tau,S_a,S_cf,S_c_phi);
+Q_k_m_1 = [S_a*tau^3*eye(3)/3,S_a*tau^2*eye(3)/2,zeros(3,1),zeros(3,1)
+           S_a*tau^2*eye(3)/2,S_a*tau*eye(3),zeros(3,1),zeros(3,1)
+           zeros(1,3),zeros(1,3),S_c_phi*tau+S_cf*tau^3/3,S_cf*tau^2/2
+           zeros(1,3),zeros(1,3),S_cf*tau^2/2,S_cf*tau
+          ];
 
-% Predicted psuedo ranges
+% Initialization of predicted psuedo ranges
 r_caret_as_minus = zeros(satellite_count,1); 
 
 for j = 1:satellite_count
     [sat_r_es_e,sat_v_es_e]= Satellite_position_and_velocity(times(1),satellite_numbers(j));
     diff = sat_r_es_e.'-x_caret_plus_k_m_1(1:3);
+
+    % Range Prediction initialization assuming identity sagnac effect matrix
     r_caret_as_minus(j) = sqrt(diff.'*diff);
-end % Predicted range initialization
+end 
 
 % Line of sight and measurement matrix initialization
 u_e_a = zeros(3,satellite_count); 
@@ -54,9 +65,11 @@ H_k = zeros(satellite_count*2,8);
 H_k(1:satellite_count,7) = 1;
 H_k(satellite_count+1:end,8) = 1;
 
-r_caret_dot_as_minus = zeros(satellite_count,1); % Range rate predictions
+% Range rate predictions initialization
+r_caret_dot_as_minus = zeros(satellite_count,1); 
 
-delta_z_min = zeros(satellite_count*2,1); % Measurement innovation
+% Measurement innovation initialization
+delta_z_min = zeros(satellite_count*2,1); 
 
 for epoch = 1:epoch_num
 
@@ -69,13 +82,15 @@ for epoch = 1:epoch_num
     x_caret_minus_k = phi_k_m_1 * x_caret_plus_k_m_1;
     P_minus_k = phi_k_m_1*P_plus_k_m_1*phi_k_m_1.' + Q_k_m_1;
 
-    % Taking out each component of the state estimate vector
+    % Extract each component of the state estimate vector
     r_caret_e_minus_ea_k = x_caret_minus_k(1:3);
     v_caret_e_minus_ea_k = x_caret_minus_k(4:6);
     roh_caret_a_minuc_c = x_caret_minus_k(7);
     roh_dot_caret_a_minuc_c = x_caret_minus_k(8);
 
     for j = 1:satellite_count
+        % Calculate Sagnac matrix given range prediction of current
+        % satellite
         C_I_e = CalcSagnacMatrix(r_caret_as_minus(j));
 
         % Range prediction from approximate user position to satellite
@@ -95,7 +110,8 @@ for epoch = 1:epoch_num
     end
     
     % Measurement noise covariance matrix calculation
-    R_k = CalcR(sigma_rho,sigma_rho_dot);
+    R_k = [eye(8,8) * sigma_rho^2,zeros(8,8)
+           zeros(8,8),eye(8,8)*sigma_rho_dot^2];
     
     % Kalman gain matrix calculation
     K_k = P_minus_k * H_k.'*inv(H_k*P_minus_k*H_k.'+R_k);
@@ -113,10 +129,11 @@ for epoch = 1:epoch_num
     r_eb_e = x_caret_plus_k_m_1(1:3);
     v_eb_e = x_caret_plus_k_m_1(4:6);
 
+    % Convert Cartesian ECEF solution to NED
     [L_b,lambda_b,h_b,v_eb_n] = pv_ECEF_to_NED(r_eb_e,v_eb_e);
     L_b = L_b * rad_to_deg;
     lambda_b = lambda_b * rad_to_deg;
-    gnss_solution = [gnss_solution;time,L_b,lambda_b,h_b,v_eb_n.'];
+    gnss_solution(epoch,:) = [time,L_b,lambda_b,h_b,v_eb_n.'];
 end
 
 outputTable = table(gnss_solution);
