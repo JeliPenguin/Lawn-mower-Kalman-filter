@@ -1,7 +1,9 @@
-function dr_solution = Dead_Reckoning(dr_measurement_data,gnss_solution,times)
+function dr_solution = Dead_Reckoning(dr_measurement_data,gnss_solution,heading_solution,times)
 % Calculates Dead Reckoning solution
 % Inputs:
 %   dr_measurement_data                 Array of raw dead reckoning measurement data
+%   gnss_solution                       Array gnss kalman filter solutions
+%   heading_solution                    Array of gyro-smooth magnetic heading solutions
 %   times                               Array of time value for each epoch
 %
 % Outputs:
@@ -34,7 +36,7 @@ for i=1:epoch_num
     gyro_measurement = dr_measurement(i,5);
     v_k = Calc_Avg_Speed(wheel_speed_measurements,gyro_measurement);
 
-    heading_k = dr_measurement(i,6) * deg_to_rad;
+    heading_k = heading_solution(i) * deg_to_rad;
 
     if i==1
         % Assume the instantaneous velocity at first epoch is given by the
@@ -65,7 +67,6 @@ end
 
 solutionTable = array2table(dr_solution);
 writetable(solutionTable,"Solutions/DR_Solution.csv",'WriteVariableNames',0)
-
 
 end
 

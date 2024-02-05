@@ -124,5 +124,4 @@ end
 outputTable = array2table(dr_gnss_solution);
 writetable(outputTable,"Solutions/DR_GNSS_Solution.csv",'WriteVariableNames',0)
 
-
 end

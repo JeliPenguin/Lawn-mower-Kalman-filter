@@ -48,21 +48,20 @@ S_DR = 0.2; % DR velocity error power spectral density
 micro_g_to_meters_per_second_squared = 9.80665E-6;
 
 % Loosely coupled INS/GNSS Kalman filter parameters
-% Gyro noise PSD (deg^2 per hour, converted to rad^2/s)                
-LC_KF_config.gyro_noise_PSD = (0.02 * deg_to_rad / 60)^2;
+S_rg = (0.02 * deg_to_rad / 60)^2; % Gyro noise PSD (deg^2 per hour, converted to rad^2/s)
 % Accelerometer noise PSD (micro-g^2 per Hz, converted to m^2 s^-3)                
 LC_KF_config.accel_noise_PSD = (200 *...
     micro_g_to_meters_per_second_squared)^2;
 % Accelerometer bias random walk PSD (m^2 s^-5)
 LC_KF_config.accel_bias_PSD = 1.0E-7;
-% Gyro bias random walk PSD (rad^2 s^-3)
-LC_KF_config.gyro_bias_PSD = 2.0E-12;
+
+S_bgd = 2.0E-12; % Gyro bias random walk PSD (rad^2 s^-3)
 % Position measurement noise SD per axis (m)
 LC_KF_config.pos_meas_SD = 2.5;
 % Velocity measurement noise SD per axis (m/s)
 LC_KF_config.vel_meas_SD = 0.05;
 
-sigma_mh = 4; % Magnetic heading error standard deviation
+sigma_mh = 4*deg_to_rad; % Magnetic heading error standard deviation
 sigma_gyro = 0.0001; % Gyroscope angular rate error standard deviation
 
 % Ends

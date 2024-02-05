@@ -40,4 +40,11 @@ ylabel("Velocity");
 grid on;
 saveas(f,"Figures/"+plotType+"/"+plotType+"_velocity_east.png")
 
+f = figure("Visible",visible);
+geoplot(latitude,longitude);
+title("Geography Position");
+grid on;
+geobasemap streets
+saveas(f,"Figures/"+plotType+"/"+plotType+"_geoplot.png")
+
 end
