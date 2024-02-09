@@ -31,11 +31,11 @@ sigma_rho_dot_assumed = 0.05; % Assumed Pseudo-range rate measurement error std
 sigma_rho = sqrt(sigma_rho_assumed^2+sigma_space^2+sigma_res_ion^2+sigma_res_trop^2+sigma_code_multipath^2); % root sum of squares of all relevant error sources
 sigma_rho_dot = sqrt(sigma_rho_dot_assumed^2+sigma_rho_dot_multipath^2); % root sum of squares of all relevant error sources
 
-sigma_p = 5; % Measurement error standard deviation (m)
 S_c_phi = 0.01; % Clock phase PSD
 S_cf = 0.04; % Clock frequency PSD
 
-T = 3; % Outlier detection threshold
+sigma_p = 9; % Measurement error standard deviation (m)
+T = 6; % Outlier detection threshold
 
 tau = 0.5; % Propagation interval
 S_a = 0.01; % Acceleration power spectral density

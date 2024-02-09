@@ -33,8 +33,9 @@ pseudo_range_rates = pseudo_range_rate_data(2:end,2:end);
 gnss_solution = zeros(epoch_num,7);
 
 % Initialize initial state for Kalman Filter, giving initial x_est and P_matrix
-[x_caret_plus_k_m_1,P_plus_k_m_1] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers,satellite_count);
+[x_caret_plus_k_m_1,P_plus_k_m_1,valid_satellite_indicies] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers);
 
+disp(valid_satellite_indicies)
 % Compute transition matrix
 phi_k_m_1 = [eye(3),eye(3)*tau,zeros(3,1),zeros(3,1)
              zeros(3),eye(3),zeros(3,1),zeros(3,1)
@@ -77,6 +78,7 @@ for epoch = 1:epoch_num
     time = times(epoch);
     current_epoch_pseudo_ranges = pseudo_ranges(epoch,:);
     current_epoch_pseudo_range_rates = pseudo_range_rates(epoch,:);
+    current_epoch_valid_indicies = valid_satellite_indicies(epoch,:);
 
     % Propagate state estimate and error covariance
     x_caret_minus_k = phi_k_m_1 * x_caret_plus_k_m_1;
@@ -117,9 +119,12 @@ for epoch = 1:epoch_num
     K_k = P_minus_k * H_k.'*inv(H_k*P_minus_k*H_k.'+R_k);
     
     % Measurement innovation calculation
+    
     for j = 1:satellite_count
-        delta_z_min(j) = current_epoch_pseudo_ranges(j) - r_caret_as_minus(j) - roh_caret_a_minuc_c;
-        delta_z_min(j+satellite_count) = current_epoch_pseudo_range_rates(j) - r_caret_dot_as_minus(j) - roh_dot_caret_a_minuc_c;
+        if current_epoch_valid_indicies(j)
+            delta_z_min(j) = current_epoch_pseudo_ranges(j) - r_caret_as_minus(j) - roh_caret_a_minuc_c;
+            delta_z_min(j+satellite_count) = current_epoch_pseudo_range_rates(j) - r_caret_dot_as_minus(j) - roh_dot_caret_a_minuc_c;
+        end
     end
 
     % Update state estimates and error covariance

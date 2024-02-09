@@ -1,20 +1,21 @@
-function hasOutlier = OutlierDetection(numberOfSatellites,H_G_e,delta_z_min,sigma_p,T)
+function [valid_indicies,maxJ] = OutlierDetection(number_of_satellites,H_G_e,delta_z_min)
     % Outlier detection
-    hasOutlier = false;
-    v = (H_G_e*inv(H_G_e.'*H_G_e)*H_G_e.'-eye(numberOfSatellites))*delta_z_min; % residuals vector
-    C_v = (eye(numberOfSatellites)-H_G_e*inv(H_G_e.'*H_G_e)*H_G_e.')*sigma_p^2;
-    maxJ = -1;
+    Define_Constants;
+    v = (H_G_e*inv(H_G_e.'*H_G_e)*H_G_e.'-eye(number_of_satellites))*delta_z_min; % residuals vector
+    C_v = (eye(number_of_satellites)-H_G_e*inv(H_G_e.'*H_G_e)*H_G_e.')*sigma_p^2;
+    valid_indicies = zeros(1,number_of_satellites);
     maxResidual = -inf;
-    for j=1:numberOfSatellites
+    maxJ = 0;
+    for j=1:number_of_satellites
         normalized_residual = norm(v(j))/sqrt(C_v(j,j));
         if normalized_residual > T
-            % disp(["Outlier detected at: ",j," Residual: ",normalized_residual])
-            % sprintf("Outlier detected with Satellite %d, Residual: %f",satelliteNumbers(j),normalized_residual)
+            % sprintf("Outlier detected with Satellite %d, Residual: %f",j,normalized_residual)
             if normalized_residual > maxResidual
                 maxJ = j;
                 maxResidual = normalized_residual;
             end
-            hasOutlier = true;
+        else
+            valid_indicies(j) = 1;
         end
     end
 end
