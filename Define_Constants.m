@@ -31,10 +31,6 @@ sigma_rho_dot_assumed = 0.05; % Assumed Pseudo-range rate measurement error std
 sigma_rho = sigma_rho_assumed;
 sigma_rho_dot = sigma_rho_dot_assumed;
 
-%% TO DISCUSS - suggest we use the above sigma_rho not these, based on the results
-% sigma_rho = sqrt(sigma_space^2+sigma_res_ion^2+sigma_res_trop^2+sigma_code_multipath^2); % root sum of squares of all relevant error sources
-% sigma_rho_dot = sqrt(sigma_rho_dot_multipath^2); % root sum of squares of all relevant error sources
-
 S_c_phi = 0.01; % Clock phase PSD
 S_cf = 0.04; % Clock frequency PSD
 
@@ -46,7 +42,6 @@ S_a = 0.01; % Acceleration power spectral density
 sigma_Gr = 5; % GNSS position measurements error standard deviation
 sigma_Gv = 0.02; % GNSS velocity measurements have an error standard deviation
 S_DR = 0.2; % DR velocity error power spectral density
-
 
 micro_g_to_meters_per_second_squared = 9.80665E-6;
 
@@ -66,5 +61,9 @@ LC_KF_config.vel_meas_SD = 0.05;
 
 sigma_mh = 4*deg_to_rad; % Magnetic heading error standard deviation
 sigma_gyro = 0.0001; % Gyroscope angular rate error standard deviation
+
+% Location of lever arms of rear-wheel frame from GNSS sensor
+l_bry = 0; % Lever arms are equidistant from centre of frame on y-axis
+l_brx = -0.2;
 
 % Ends
