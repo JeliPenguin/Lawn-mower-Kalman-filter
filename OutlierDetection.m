@@ -17,7 +17,7 @@ function [valid_indicies, maxJ] = OutlierDetection(number_of_satellites,H_G_e,de
     for j=1:number_of_satellites
         normalized_residual = norm(v(j))/sqrt(C_v(j,j));
         if normalized_residual > T
-            sprintf("Outlier detected with Satellite %d, Residual: %f",j,normalized_residual)
+            % sprintf("Outlier detected with Satellite %d, Residual: %f",j,normalized_residual)
             if normalized_residual > maxResidual
                 maxJ = j;
                 maxResidual = normalized_residual;
