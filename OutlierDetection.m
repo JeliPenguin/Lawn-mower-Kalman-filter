@@ -1,15 +1,23 @@
-function [valid_indicies,maxJ] = OutlierDetection(number_of_satellites,H_G_e,delta_z_min)
+function [valid_indicies, maxJ] = OutlierDetection(number_of_satellites,H_G_e,delta_z_min)
     % Outlier detection
     Define_Constants;
-    v = (H_G_e*inv(H_G_e.'*H_G_e)*H_G_e.'-eye(number_of_satellites))*delta_z_min; % residuals vector
-    C_v = (eye(number_of_satellites)-H_G_e*inv(H_G_e.'*H_G_e)*H_G_e.')*sigma_p^2;
+
+    % Compute residuals vector
+    v = (H_G_e * inv(H_G_e.' * H_G_e) * H_G_e.' - eye(number_of_satellites)) * delta_z_min; 
+
+    % Compute residuals covariance matrix
+    C_v = (eye(number_of_satellites) - H_G_e * inv(H_G_e.' * H_G_e) * H_G_e.') * sigma_rho^2;
+
+    % Setup
     valid_indicies = zeros(1,number_of_satellites);
     maxResidual = -inf;
     maxJ = 0;
+
+    % Check for outliers
     for j=1:number_of_satellites
         normalized_residual = norm(v(j))/sqrt(C_v(j,j));
         if normalized_residual > T
-            % sprintf("Outlier detected with Satellite %d, Residual: %f",j,normalized_residual)
+            sprintf("Outlier detected with Satellite %d, Residual: %f",j,normalized_residual)
             if normalized_residual > maxResidual
                 maxJ = j;
                 maxResidual = normalized_residual;
@@ -19,3 +27,4 @@ function [valid_indicies,maxJ] = OutlierDetection(number_of_satellites,H_G_e,del
         end
     end
 end
+
