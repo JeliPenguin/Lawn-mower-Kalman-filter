@@ -44,21 +44,18 @@ dr_gnss_velocity_e = dr_gnss_solution(:,5);
 % plot(dr_gnss_longitude,dr_gnss_latitude);
 % legend(["GNSS","DR","GR-DNSS"]);
 
-% figure;
-% plot(times,gnss_velocity_n,"b-o");
-% hold on
-% plot(times,gnss_outlier_velocity_n);
-% title("North Velocity");
-% xlabel("Time (s)");
-% ylabel("Velocity (m/s)");
-% legend(["GNSS Outlier Removed","GNSS With Outlier"]);
+figure;
+plot(gnss_longitude,gnss_latitude);
+hold on
+plot(gnss_outlier_longitude,gnss_outlier_latitude);
+legend(["GNSS Outlier Removed","GNSS With Outlier"]);
 
-Plot_Graph(gnss_longitude,gnss_latitude,gnss_velocity_n,gnss_velocity_e,times,"GNSS",false)
+% Plot_Graph(gnss_longitude,gnss_latitude,gnss_velocity_n,gnss_velocity_e,times,"GNSS",false)
 
-Plot_Graph(gnss_outlier_longitude,gnss_outlier_latitude,gnss_outlier_velocity_n,gnss_outlier_velocity_e,times,"GNSS-Outlier",false)
+% Plot_Graph(gnss_outlier_longitude,gnss_outlier_latitude,gnss_outlier_velocity_n,gnss_outlier_velocity_e,times,"GNSS-Outlier",false)
 
-Plot_Graph(dr_longitude,dr_latitude,dr_velocity_n,dr_velocity_e,times,"DR",false)
+% Plot_Graph(dr_longitude,dr_latitude,dr_velocity_n,dr_velocity_e,times,"DR",false)
+% 
+% Plot_Graph(dr_gnss_longitude,dr_gnss_latitude,dr_gnss_velocity_n,dr_gnss_velocity_e,times,"DR-GNSS",false)
 
-Plot_Graph(dr_gnss_longitude,dr_gnss_latitude,dr_gnss_velocity_n,dr_gnss_velocity_e,times,"DR-GNSS",false)
-
-Plot_heading(dr_gnss_longitude,dr_gnss_latitude,gyro_mag_heading_solution,false);
+% Plot_heading(dr_gnss_longitude,dr_gnss_latitude,gyro_mag_heading_solution,false);

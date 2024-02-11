@@ -1,9 +1,11 @@
-function gnss_solution = GNSS_KF(pseudo_range_data,pseudo_range_rate_data,times)
+function gnss_solution = GNSS_KF(pseudo_range_data,pseudo_range_rate_data,times,fix_outlier)
 % Calculates GNSS Kalman Filter estimation, saving solutions in GNSS_Solution.csv
 % Inputs:
 %   pseudo_range_data                 Array of raw pseudo range measurement data
 %   pseudo_range_rate_data            Array of raw pseudo range rate measurement data
 %   times                             Array of time value for each epoch
+%   fix_outlier                       Flag indicating for fixing outliers
+%                                     or not
 %
 % Outputs:
 %   gnss_solution                     Calculated GNSS KF solution, for each row
@@ -33,7 +35,7 @@ pseudo_range_rates = pseudo_range_rate_data(2:end,2:end);
 gnss_solution = zeros(epoch_num,7);
 
 % Initialize initial state for Kalman Filter, giving initial x_est and P_matrix
-[x_caret_plus_k_m_1,P_plus_k_m_1,valid_pseudo_range_indicies,valid_pseudo_range_rate_indicies] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers);
+[x_caret_plus_k_m_1,P_plus_k_m_1,valid_pseudo_range_indicies,valid_pseudo_range_rate_indicies] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers,fix_outlier);
 
 % disp(valid_satellite_indicies)
 % Compute transition matrix
@@ -144,6 +146,8 @@ for epoch = 1:epoch_num
     gnss_solution(epoch,:) = [time,L_b,lambda_b,h_b,v_eb_n.'];
 end
 
-outputTable = table(gnss_solution);
-writetable(outputTable,"Solutions/GNSS_Solution"+".csv",'WriteVariableNames',0)
+if fix_outlier
+    outputTable = table(gnss_solution);
+    writetable(outputTable,"Solutions/GNSS_Solution"+".csv",'WriteVariableNames',0)
+end
 end

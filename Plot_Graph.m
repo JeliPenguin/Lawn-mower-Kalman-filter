@@ -19,24 +19,24 @@ end
 f = figure("Visible",visible);
 plot(longitude, latitude);
 title("Position");
-xlabel("Longitude");
-ylabel("Latitude");
+xlabel("Longitude (deg)");
+ylabel("Latitude (deg)");
 grid on;
 saveas(f,"Figures/"+plotType+"/"+plotType+"_position.png")
 
 f = figure("Visible",visible);
 plot(times, v_N);
 title("North Velocity");
-xlabel("Time");
-ylabel("Velocity");
+xlabel("Time (s)");
+ylabel("Velocity (m/s)");
 grid on;
 saveas(f,"Figures/"+plotType+"/"+plotType+"_velocity_north.png")
 
 f = figure("Visible",visible);
 plot(times, v_E);
 title("East Velocity");
-xlabel("Time");
-ylabel("Velocity");
+xlabel("Time (s)");
+ylabel("Velocity (m/s)");
 grid on;
 saveas(f,"Figures/"+plotType+"/"+plotType+"_velocity_east.png")
 
