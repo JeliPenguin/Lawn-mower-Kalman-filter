@@ -3,21 +3,23 @@ function [x_est,P_matrix,valid_pseudo_range_indicies,valid_pseudo_range_rate_ind
 %covariance matrix using one epoch least squares
 %
 % Inputs:
-%   times                       Array of time value for each epoch
-%   pseudo_ranges               Array of pseudo-range measurements for all epochs from all satellites   
-%   pseudo_range_rates          Array of pseudo-range rate measurements for all epochs from all satellites   
-%   satellite_numbers           Array of the number given to each of the satellites       
-%   number_of_satellites        Total count of number of satellites giving the measurements                    
+%   times                               Array of time value for each epoch
+%   pseudo_ranges                       Array of pseudo-range measurements for all epochs from all satellites   
+%   pseudo_range_rates                  Array of pseudo-range rate measurements for all epochs from all satellites   
+%   satellite_numbers                   Array of the number given to each of the satellites       
+%   number_of_satellites                Total count of number of satellites giving the measurements                    
 %
 % Outputs:
-%   x_est                       Vector of initial state estimates:
-%                                   Rows 1-3            estimated ECEF user position (m)
-%                                   Rows 4-6            estimated ECEF user velocity (m/s)
-%                                   Row 7               estimated receiver clock offset (m) 
-%                                   Row 8               estimated receiver clock drift (m/s)
-%   P_matrix                    State estimation error covariance matrix
-%   valid_pseudo_range_indicies    Matrix indicating whether the satellite
-%                               measurement is an outlier or not (number of epochs X number of satellites)
+%   x_est                               Vector of initial state estimates:
+%                                           Rows 1-3            estimated ECEF user position (m)
+%                                           Rows 4-6            estimated ECEF user velocity (m/s)
+%                                           Row 7               estimated receiver clock offset (m) 
+%                                           Row 8               estimated receiver clock drift (m/s)
+%   P_matrix                            State estimation error covariance matrix
+%   valid_pseudo_range_indicies         Matrix indicating whether the satellite pseudo range
+%                                       is an outlier or not (number of epochs X number of satellites)
+%   valid_pseudo_range_rate_indicies    Matrix indicating whether the satellite pseudo range rate
+%                                       is an outlier or not (number of epochs X number of satellites)
 
 Define_Constants;
 

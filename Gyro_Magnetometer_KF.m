@@ -1,4 +1,11 @@
 function gyro_mag_heading_solution = Gyro_Magnetometer_KF(dr_measurement_data,times)
+% Caculates gyro smoothed magnetic heading solution using Kalman filter
+% Inputs:
+%   dr_measurement_data                 Array of raw dead reckoning measurement data
+%   times                               Array of time value for each epoch
+%
+% Outputs:
+%   gyro_mag_heading_solution           Calculated heading solution for all epochs (deg)
 
 Define_Constants;
 
@@ -6,10 +13,11 @@ dr_measurement = dr_measurement_data(:,2:end);
 
 epoch_num = height(times);
 
+% Setting initial covariance matrix
 P_k_m_1_plus = [sigma_gyro^2,0
                 0,1];
 
-
+% First state being delta gyro heading, second state being gyro bias
 x_caret_k_m_1_plus = zeros(2,1);
 
 % Compute transition matrix
@@ -32,10 +40,14 @@ mag_data = dr_measurement(:,6)*deg_to_rad;
 
 gyro_mag_heading_solution = zeros(epoch_num,1);
 gyro_mag_heading_solution(1) = mag_data(1)*rad_to_deg;
+
+% Set initial gyro heading as initial magnetic heading
 psi_k_g = mag_data(1);
 for i = 2:epoch_num
-
+    % Obtain magnetometer measurement
     psi_k_M = mag_data(i);
+
+    % Propagate gyro heading using gyro measured angular rate
     psi_k_g = psi_k_g+gyro_data(i)*tau;
 
     % Propagate state estimates and error covariance matrix
@@ -58,6 +70,7 @@ for i = 2:epoch_num
 
 end
 
+% Plotting comparison between unsmoothed and smoothed heading solution
 t = (1:epoch_num) * tau;
 f = figure("Visible","off");
 plot(t, mag_data*rad_to_deg, 'b', t, gyro_mag_heading_solution, 'r');

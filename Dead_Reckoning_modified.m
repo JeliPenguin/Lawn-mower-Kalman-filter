@@ -1,4 +1,4 @@
-function dr_solution = Dead_Reckoning(dr_measurement_data,gnss_solution,heading_solution,times)
+function dr_solution = Dead_Reckoning_modified(dr_measurement_data,gnss_solution,heading_solution,times)
 % Calculates Dead Reckoning solution
 % Inputs:
 %   dr_measurement_data                 Array of raw dead reckoning measurement data

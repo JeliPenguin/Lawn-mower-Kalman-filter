@@ -36,7 +36,7 @@ sigma_rho_dot = sigma_rho_dot_assumed;
 S_c_phi = 0.01; % Clock phase PSD
 S_cf = 0.04; % Clock frequency PSD
 
-T = 5.5; % Outlier detection threshold
+T = 5; % Outlier detection threshold
 
 tau = 0.5; % Propagation interval
 S_a = 0.01; % Acceleration power spectral density
@@ -48,7 +48,7 @@ S_DR = 0.2; % DR velocity error power spectral density
 micro_g_to_meters_per_second_squared = 9.80665E-6;
 
 % Loosely coupled INS/GNSS Kalman filter parameters
-S_rg = (0.02 * deg_to_rad / 60)^2; % Gyro noise PSD (deg^2 per hour, converted to rad^2/s)
+S_rg = 3e-06; % Gyro noise PSD (deg^2 per hour, converted to rad^2/s)
 % Accelerometer noise PSD (micro-g^2 per Hz, converted to m^2 s^-3)                
 LC_KF_config.accel_noise_PSD = (200 *...
     micro_g_to_meters_per_second_squared)^2;

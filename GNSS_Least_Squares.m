@@ -12,12 +12,13 @@ function [x_est,H_G_e,delta_z_min,delta_z_dot_min,r_caret_ea_e_minus,v_caret_ea_
 %
 % Outputs:
 %   x_est                                      Vector of initial state estimates:
-%                                                Rows 1-3            estimated ECEF user position (m)
-%                                                Rows 4-6            estimated ECEF user velocity (m/s)
-%                                                Row 7               estimated receiver clock offset (m) 
-%                                                Row 8               estimated receiver clock drift (m/s)
-%  epoch_valid_indicies                        Array indicating whether the satellite
-%                                              measurement is an outlier or not for current epoch
+%                                                   Rows 1-3            estimated ECEF user position (m)
+%                                                   Rows 4-6            estimated ECEF user velocity (m/s)
+%                                                   Row 7               estimated receiver clock offset (m) 
+%                                                   Row 8               estimated receiver clock drift (m/s)
+%  H_G_e                                       Calculated Measurement Matrix
+%  delta_z_min                                 Calculate innovation vector for positions
+%  delta_z_dot_min                             Calculate innovation vector for velocities
 %  r_caret_ea_e_minus                          Position prediction for next epoch
 %  v_caret_ea_e_minus                          Velocity prediction for next epoch
 
