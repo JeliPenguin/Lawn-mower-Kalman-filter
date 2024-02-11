@@ -1,4 +1,4 @@
-function [x_est,P_matrix,valid_satellite_indicies] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers)
+function [x_est,P_matrix,valid_pseudo_range_indicies,valid_pseudo_range_rate_indicies] = Initialise_GNSS_KF(times,pseudo_ranges,pseudo_range_rates,satellite_numbers)
 %Initialise_GNSS_KF - Initializes the GNSS EKF state estimates and error
 %covariance matrix using one epoch least squares
 %
@@ -16,7 +16,7 @@ function [x_est,P_matrix,valid_satellite_indicies] = Initialise_GNSS_KF(times,ps
 %                                   Row 7               estimated receiver clock offset (m) 
 %                                   Row 8               estimated receiver clock drift (m/s)
 %   P_matrix                    State estimation error covariance matrix
-%   valid_satellite_indicies    Matrix indicating whether the satellite
+%   valid_pseudo_range_indicies    Matrix indicating whether the satellite
 %                               measurement is an outlier or not (number of epochs X number of satellites)
 
 Define_Constants;
@@ -29,33 +29,44 @@ v_caret_ea_e_minus = [0;0;0];
 
 epoch_num = height(times);
 
-valid_satellite_indicies = ones(epoch_num,length(satellite_numbers));
+valid_pseudo_range_indicies = ones(epoch_num,length(satellite_numbers));
+valid_pseudo_range_rate_indicies = ones(epoch_num,length(satellite_numbers));
 
 % First epoch outlier correction
 
 original_r_caret_ea_e_minus = r_caret_ea_e_minus;
 original_v_caret_ea_e_minus = v_caret_ea_e_minus;
+valid_satellite_numbers = satellite_numbers;
 epoch_pseudo_range_measurements = pseudo_ranges(1,:);
 epoch_pseudo_range_rate_measurements = pseudo_range_rates(1,:);
-[x_est_m,epoch_valid_indicies,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(times(1),epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,satellite_numbers,r_caret_ea_e_minus,v_caret_ea_e_minus,mode);
-while (sum(epoch_valid_indicies) == length(epoch_valid_indicies))
+[x_est_m,H_G_e,delta_z_min,delta_z_dot_min,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(times(1),epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,satellite_numbers,r_caret_ea_e_minus,v_caret_ea_e_minus);
+
+[~,maxJ] = Outlier_Detection(length(satellite_numbers),H_G_e,delta_z_min,sigma_rho);
+
+while maxJ > 0
     % Do the calculation again with outlier removed
-    epoch_pseudo_range_measurements = Outlier_Data_Correction(epoch_valid_indicies,epoch_pseudo_range_measurements);
-    % epoch_pseudo_range_rate_measurements = Outlier_Data_Correction(epoch_valid_indicies,epoch_pseudo_range_rate_measurements);
-    valid_satellite_numbers = Outlier_Data_Correction(epoch_valid_indicies,satellite_numbers);
-    [x_est_m,epoch_valid_indicies,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(times(1),epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,valid_satellite_numbers,original_r_caret_ea_e_minus,original_v_caret_ea_e_minus,mode);
+    epoch_pseudo_range_measurements(maxJ) = [];
+    epoch_pseudo_range_rate_measurements(maxJ) = [];
+    valid_satellite_numbers(maxJ) = [];
+    [x_est_m,H_G_e,delta_z_min,delta_z_dot_min,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(times(1),epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,valid_satellite_numbers,original_r_caret_ea_e_minus,original_v_caret_ea_e_minus);
+    [~,maxJ] = Outlier_Detection(length(valid_satellite_numbers),H_G_e,delta_z_min,sigma_rho);
 end
+
+[~,maxJDot] = Outlier_Detection(length(satellite_numbers),H_G_e,delta_z_dot_min,sigma_rho_dot);
+while maxJDot > 0
+[~,maxJDot] = Outlier_Detection(length(valid_satellite_numbers),H_G_e,delta_z_dot_min,sigma_rho_dot);
 
 % Set initial estimation with all outliers removed
 x_est = x_est_m;
-
-
 % Detect satellites that has outliers for following epochs
 for epoch=2:epoch_num
     epoch_pseudo_range_measurements = pseudo_ranges(epoch,:);
     epoch_pseudo_range_rate_measurements = pseudo_range_rates(epoch,:);
-    [~,epoch_valid_indicies,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(times(epoch),epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,satellite_numbers,r_caret_ea_e_minus,v_caret_ea_e_minus);
-    valid_satellite_indicies(epoch,:) = epoch_valid_indicies;
+    [~,H_G_e,delta_z_min,delta_z_dot_min,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(times(epoch),epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,satellite_numbers,r_caret_ea_e_minus,v_caret_ea_e_minus);
+    [epoch_valid_psuedo_range_indicies,~] = Outlier_Detection(length(satellite_numbers),H_G_e,delta_z_min,sigma_rho);
+    [epoch_valid_psuedo_range_rate_indicies,~] = Outlier_Detection(length(satellite_numbers),H_G_e,delta_z_dot_min,sigma_rho_dot);
+    valid_pseudo_range_indicies(epoch,:) = epoch_valid_psuedo_range_indicies;
+    valid_pseudo_range_rate_indicies(epoch,:) = epoch_valid_psuedo_range_rate_indicies;
 end
 
 P_matrix =  zeros(8);

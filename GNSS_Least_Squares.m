@@ -1,4 +1,4 @@
-function [x_est,H_G_e,delta_z_min,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(time,epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,satellite_numbers,r_caret_ea_e_minus,v_caret_ea_e_minus)
+function [x_est,H_G_e,delta_z_min,delta_z_dot_min,r_caret_ea_e_minus,v_caret_ea_e_minus] = GNSS_Least_Squares(time,epoch_pseudo_range_measurements,epoch_pseudo_range_rate_measurements,satellite_numbers,r_caret_ea_e_minus,v_caret_ea_e_minus)
 % Calculates least square solution for current epoch GNSS data
 %
 % Inputs:

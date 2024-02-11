@@ -5,6 +5,8 @@
 % Copyright 2016, Paul Groves
 % License: BSD; see license.txt for details
 
+% Modified by Group 5 Feb 2024
+
 % Constants
 deg_to_rad = 0.01745329252; % Degrees to radians conversion factor
 rad_to_deg = 1/deg_to_rad; % Radians to degrees conversion factor
@@ -34,7 +36,7 @@ sigma_rho_dot = sigma_rho_dot_assumed;
 S_c_phi = 0.01; % Clock phase PSD
 S_cf = 0.04; % Clock frequency PSD
 
-T = 6; % Outlier detection threshold
+T = 5.5; % Outlier detection threshold
 
 tau = 0.5; % Propagation interval
 S_a = 0.01; % Acceleration power spectral density

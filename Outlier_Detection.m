@@ -1,4 +1,4 @@
-function [valid_indicies, maxJ] = OutlierDetection(number_of_satellites,H_G_e,delta_z_min)
+function [valid_indicies, maxJ] = Outlier_Detection(number_of_satellites,H_G_e,delta_z_min,sigma)
     % Outlier detection
     Define_Constants;
 
@@ -6,7 +6,7 @@ function [valid_indicies, maxJ] = OutlierDetection(number_of_satellites,H_G_e,de
     v = (H_G_e * inv(H_G_e.' * H_G_e) * H_G_e.' - eye(number_of_satellites)) * delta_z_min; 
 
     % Compute residuals covariance matrix
-    C_v = (eye(number_of_satellites) - H_G_e * inv(H_G_e.' * H_G_e) * H_G_e.') * sigma_rho^2;
+    C_v = (eye(number_of_satellites) - H_G_e * inv(H_G_e.' * H_G_e) * H_G_e.') * sigma^2;
 
     % Setup
     valid_indicies = zeros(1,number_of_satellites);
