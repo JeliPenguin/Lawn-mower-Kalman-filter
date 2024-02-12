@@ -34,6 +34,11 @@ dr_gnss_longitude = dr_gnss_solution(:,3);
 dr_gnss_velocity_n = dr_gnss_solution(:,4);
 dr_gnss_velocity_e = dr_gnss_solution(:,5);
 
+%% Final Output
+final_output = [dr_gnss_solution,gyro_mag_heading_solution];
+outputTable = array2table(final_output);
+writetable(outputTable,"Solutions/final_solution.csv",'WriteVariableNames',0)
+
 
 %% Plotting
 % figure;
@@ -49,12 +54,13 @@ dr_gnss_velocity_e = dr_gnss_solution(:,5);
 % legend(["GNSS","DR","GR-DNSS"]);
 
 % figure;
-% plot(times,gnss_velocity_n,"b-o");
+% plot(gnss_longitude,gnss_latitude,"b-o");
 % hold on
-% plot(times,gnss_outlier_velocity_n);
-% title("East Velocity");
-% xlabel("Time (s)");
-% ylabel("Velocity (m/s)");
+% plot(gnss_outlier_longitude,gnss_outlier_latitude);
+% title("Position");
+% xlabel("Longitude (deg)");
+% ylabel("Latitude (deg)");
+% grid on
 % legend(["GNSS Outlier Removed","GNSS With Outlier"]);
 
 Plot_Graph(gnss_longitude,gnss_latitude,gnss_velocity_n,gnss_velocity_e,times,"GNSS",false)

@@ -72,11 +72,12 @@ end
 
 % Plotting comparison between unsmoothed and smoothed heading solution
 t = (1:epoch_num) * tau;
-f = figure("Visible","off");
+f = figure("Visible","on");
 plot(t, mag_data*rad_to_deg, 'b', t, gyro_mag_heading_solution, 'r');
 legend('Magnetometer Data', 'Filtered Heading');
 xlabel('Time (s)');
 ylabel('Heading (deg)');
+grid on
 title('Gyro Smoothed magnetic heading');
 saveas(f,"Figures/Heading/smoothedComparison.png")
 
