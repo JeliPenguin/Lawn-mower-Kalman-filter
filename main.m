@@ -37,18 +37,22 @@ dr_gnss_velocity_e = dr_gnss_solution(:,5);
 
 %% Plotting
 % figure;
-% plot(gnss_longitude,gnss_latitude);
+% plot(times, gnss_velocity_e,"xr-");
 % hold on
-% plot(dr_longitude,dr_latitude);
+% plot(times, dr_velocity_e,"*g-");
 % hold on
-% plot(dr_gnss_longitude,dr_gnss_latitude);
+% plot(times,dr_gnss_velocity_e,"b");
+% grid on
+% title("East Velocities")
+% xlabel("Time (s)");
+% ylabel("Velocity (m/s)");
 % legend(["GNSS","DR","GR-DNSS"]);
 
 % figure;
 % plot(times,gnss_velocity_n,"b-o");
 % hold on
 % plot(times,gnss_outlier_velocity_n);
-% title("North Velocity");
+% title("East Velocity");
 % xlabel("Time (s)");
 % ylabel("Velocity (m/s)");
 % legend(["GNSS Outlier Removed","GNSS With Outlier"]);
